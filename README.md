@@ -6,9 +6,20 @@
 4. Run `npm run test` to get the program running (modify the user and password if needed)
 5. Examine the typescript code under `server.ts`
 
-# Commands
+### Commands
 
-`insert user: npm run test -- -u [username]`
+### Insert User
+
+```
+npm run test -- -u [username]
+```
 e.g.: npm run test -- -u anansilva
-`list users in a location: npm run test -- -l [location]`
+
+
+### List Users in a Location:
+
+```
+npm run test -- -l [location]
+```
 e.g.: npm run test -- -l Lisbon
+

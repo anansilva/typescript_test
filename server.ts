@@ -23,14 +23,16 @@ const options : DBOptions = {
   database: 'lovelystay_test',
 };
 
-// Get command line argument with a github username
+// Get command line arguments
 const userName = argv['u'];
+const loc = argv['l'];
 
-// if(userName == undefined) || (location == undefined) {
-//   console.error('Please insert a valid input');
-//   process.exit();
-// }
+if(userName == undefined && loc == undefined) {
+  console.error('Please insert a valid input');
+  process.exit();
+}
 
+// Results
 console.info('Connecting to the database:',
   `${options.user}@${options.host}:${options.port}/${options.database}`);
 
@@ -69,6 +71,19 @@ db.none('CREATE TABLE IF NOT EXISTS github_users (id BIGSERIAL, login TEXT UNIQU
   'INSERT INTO github_users (login, name, company, followers, following, location) VALUES ($[login], $[name], $[company], $[followers], $[following], $[location]) RETURNING id', data)
 ).then(({id}) => console.log(id))
 .then(() => process.exit(0));
+
+}
+
+if(loc !== undefined) {
+
+  db.any(`SELECT login FROM github_users WHERE location LIKE'%${loc}%'`)
+     .then(data => {
+      console.log(`Users in ${loc}:`);
+      data.forEach(element => {
+        console.log(element.login)
+      });
+    })
+    .then(() => process.exit(0));
 
 }
 

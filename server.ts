@@ -22,8 +22,14 @@ const options : DBOptions = {
   database: 'lovelystay_test',
 };
 
-// Prompt user for a github username
+// Get command line argument with a github username
 const userName = process.argv[2];
+
+if(userName == undefined) {
+  console.error('Please insert a valid username');
+  console.error('Type this command in the terminal: npm run test -- username');
+  process.exit();
+}
 
 console.info('Connecting to the database:',
   `${options.user}@${options.host}:${options.port}/${options.database}`);

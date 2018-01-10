@@ -1,6 +1,7 @@
 const pgPromise = require('pg-promise');
 const R         = require('ramda');
 const request   = require('request-promise');
+const argv      = require('minimist')(process.argv.slice(2));
 
 // Limit the amount of debugging of SQL expressions
 const trimLogsSize : number = 200;
@@ -23,13 +24,12 @@ const options : DBOptions = {
 };
 
 // Get command line argument with a github username
-const userName = process.argv[2];
+const userName = argv['u'];
 
-if(userName == undefined) {
-  console.error('Please insert a valid username');
-  console.error('Type this command in the terminal: npm run test -- username');
-  process.exit();
-}
+// if(userName == undefined) || (location == undefined) {
+//   console.error('Please insert a valid input');
+//   process.exit();
+// }
 
 console.info('Connecting to the database:',
   `${options.user}@${options.host}:${options.port}/${options.database}`);
@@ -55,7 +55,7 @@ interface GithubUsers
 const pgp = pgPromise(pgpDefaultConfig);
 const db = pgp(options);
 
-// db.none('DROP TABLE github_users')
+if(userName !== undefined) {
 
 db.none('CREATE TABLE IF NOT EXISTS github_users (id BIGSERIAL, login TEXT UNIQUE, name TEXT, company TEXT, followers SERIAL, following SERIAl, location TEXT)')
 .then(() => request({
@@ -69,3 +69,6 @@ db.none('CREATE TABLE IF NOT EXISTS github_users (id BIGSERIAL, login TEXT UNIQU
   'INSERT INTO github_users (login, name, company, followers, following, location) VALUES ($[login], $[name], $[company], $[followers], $[following], $[location]) RETURNING id', data)
 ).then(({id}) => console.log(id))
 .then(() => process.exit(0));
+
+}
+

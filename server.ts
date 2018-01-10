@@ -29,8 +29,8 @@ const loc = argv['l'];
 
 if(userName == undefined && loc == undefined) {
   console.error('Please insert a valid input');
-  console.log('insert user: npm run test -- -u username')
-  console.log('list users in a location: npm run test -- -l location')
+  console.log('insert user: npm run test -- -u [username]')
+  console.log('list users in a location: npm run test -- -l [location]')
   process.exit();
 }
 
